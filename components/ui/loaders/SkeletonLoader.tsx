@@ -1,5 +1,5 @@
-﻿import {Skeleton} from "@rneui/base";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+﻿import { StyleSheet, View, Animated, Dimensions } from "react-native";
+import { useEffect, useRef } from "react";
 
 const { width } = Dimensions.get('screen')
 
@@ -8,16 +8,43 @@ type Props = {
 }
 
 export default function SkeletonLoader({ height = 40 }: Props) {
+    const shimmerAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(shimmerAnim, {
+                    toValue: 1,
+                    duration: 1200,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(shimmerAnim, {
+                    toValue: 0,
+                    duration: 0,
+                    useNativeDriver: true,
+                })
+            ])
+        ).start();
+    }, [shimmerAnim]);
+
+    const translateX = shimmerAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-width, width]
+    });
+
     return (
         <View style={styles.loadingContainer}>
-            <Skeleton
-                width={width - 60}
-                height={height}
-                skeletonStyle={styles.skeletonStyle}
-                LinearGradientComponent={() => (
-                    <View style={styles.skeletonStyle} />
-                )}
-            />
+            <View style={[styles.skeleton, { width: width - 60, height }]}>
+                <Animated.View
+                    style={[
+                        styles.shimmer,
+                        {
+                            height,
+                            transform: [{ translateX }],
+                        },
+                    ]}
+                />
+            </View>
         </View>
     )
 }
@@ -25,11 +52,20 @@ export default function SkeletonLoader({ height = 40 }: Props) {
 const styles = StyleSheet.create({
     loadingContainer: {
         flex: 1,
-        // backgroundColor: 'transparent',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    skeletonStyle: {
+    skeleton: {
         backgroundColor: '#333',
-    }
-})
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    shimmer: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        width: '60%',
+        borderRadius: 8,
+    },
+});

@@ -1,5 +1,4 @@
 ﻿import { StyleSheet, View, Text } from "react-native";
-import { Icon } from '@rneui/themed'
 import { useEffect, useState } from "react";
 import SkeletonLoader from "./loaders/SkeletonLoader";
 
@@ -18,10 +17,10 @@ export default function Footer() {
         <View style={styles.container}>
             <Text style={styles.paragraph}>Have any suggestions? Join the Discord here</Text>
             <View style={styles.socialIcons}>
-                <Icon name='discord' />
+                {/* <Icon name='discord' />
                 <Icon name='logo-twitter' type="ionicon" />
                 <Icon name='telegram' />
-                <Icon name='logo-github' type="ionicon" />
+                <Icon name='logo-github' type="ionicon" /> */}
             </View>
         </View>
     )

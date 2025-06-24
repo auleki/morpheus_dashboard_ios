@@ -1,5 +1,5 @@
 ﻿import {Text, View, StyleSheet, Dimensions} from "react-native";
-import { Icon } from '@rneui/themed'
+// import { Icon } from '@rneui/themed'
 
 const {width} = Dimensions.get('window')
 
@@ -22,7 +22,7 @@ export default function DashTab({title, onClick, id, pathname, isActive, locked}
             >
                 {title}
             </Text>
-            <Text>{locked ? <Icon name="lock" color={"green"} size={16} /> : null}</Text>
+            <Text>{locked ? 'Locked' : null}</Text>
         </View>
     )
 }
